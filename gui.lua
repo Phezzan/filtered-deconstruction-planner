@@ -1,8 +1,7 @@
 -- Intializes the top button GUI element for the given player
-function gui_init(player, researched)
-  researched = researched or false
+function gui_init(player)
 
-  if (not player.gui.top["fdp-gui-button"]) and (player.force.technologies["automated-construction"].researched or researched) then
+  if (not player.gui.top["fdp-gui-button"]) then
     player.gui.top.add{
       type = "button",
       name = "fdp-gui-button",
@@ -133,43 +132,43 @@ function gui_refresh(player)
 end
 
 -- Called when the player clicks the gui button
-script.on_event(FDP_EVENTS.on_gui_clicked, function(event)
+function fdp_gui_clicked(event)
     if event.player.gui.left["fdp-gui-frame"] then
-      gui_hide_frame(event.player)
+        gui_hide_frame(event.player)
     else
-      gui_show_frame(event.player)
+        gui_show_frame(event.player)
     end
-  end)
+end
 
 -- Called when the player changes the mode
-script.on_event(FDP_EVENTS.on_mode_changed, function(event)
+function fdp_mode_changed(event)
     global["config"][event.player.index]["mode"] = event.mode
     gui_refresh(event.player)
-  end)
+end
 
 -- Called when the player clicks a filter icon
-script.on_event(FDP_EVENTS.on_button_filter_clicked, function(event)
+function fdp_button_filter_clicked(event)
     if not event.player.cursor_stack.valid_for_read then
-      table.remove(global["config"][event.player.index]["filter"], event.index)
-    else
-      if is_in_filter(event.player, event.player.cursor_stack.name) then
-        event.player.print({"fdp-error-duplicate"})
-      else
         table.remove(global["config"][event.player.index]["filter"], event.index)
-        table.insert(global["config"][event.player.index]["filter"], event.index, event.player.cursor_stack.name)
-      end
+    else
+        if is_in_filter(event.player, event.player.cursor_stack.name) then
+            event.player.print({"fdp-error-duplicate"})
+        else
+            table.remove(global["config"][event.player.index]["filter"], event.index)
+            table.insert(global["config"][event.player.index]["filter"], event.index, event.player.cursor_stack.name)
+        end
     end
     gui_refresh(event.player)
-  end)
+end
 
 -- Called when the player clicks the eyedropper button
-script.on_event(FDP_EVENTS.on_button_eyedropper_clicked, function(event)
+function fdp_button_eyedropper_clicked(event)
     global["config"][event.player.index]["eyedropping"] = not global["config"][event.player.index]["eyedropping"]
     gui_refresh(event.player)
-  end)
+end
 
 -- Called when the player clicks the clear button
-script.on_event(FDP_EVENTS.on_button_clear_clicked, function(event)
+function fdp_button_clear_clicked(event)
     global["config"][event.player.index]["filter"] = {}
     gui_refresh(event.player)
-  end)
+end

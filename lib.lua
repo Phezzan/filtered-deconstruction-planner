@@ -10,7 +10,13 @@ function get_entity_name(entity)
   elseif entity.name == "deconstructible-tile-proxy" then
     return entity.surface.get_tile(entity.position.x, entity.position.y).prototype.mineable_properties.products[1].name
   elseif entity.type == "tree" then
-    return "fdp-tree-proxy"
+      if string.sub(entity.name, 1, 4) == "dead" then
+          return "fdp-dead-proxy"
+      elseif string.sub(entity.name, 1, 3) == "dry" then
+          return "fdp-dead-proxy"
+      else 
+          return "fdp-tree-proxy"
+      end
   else
     return entity.name
   end
@@ -20,6 +26,8 @@ end
 function get_sprite_for_filter(filter)
   if filter == "" then
     return ""
+  elseif filter == "fdp-dead-proxy" then
+      return "entity/dead-grey-trunk"
   elseif filter == "fdp-tree-proxy" then
     return "entity/tree-03"
   elseif filter == "stone-rock" then
