@@ -133,42 +133,42 @@ end
 
 -- Called when the player clicks the gui button
 function fdp_gui_clicked(event)
-    if event.player.gui.left["fdp-gui-frame"] then
-        gui_hide_frame(event.player)
-    else
-        gui_show_frame(event.player)
-    end
+  if event.player.gui.left["fdp-gui-frame"] then
+    gui_hide_frame(event.player)
+  else
+    gui_show_frame(event.player)
+  end
 end
 
 -- Called when the player changes the mode
 function fdp_mode_changed(event)
-    global["config"][event.player.index]["mode"] = event.mode
-    gui_refresh(event.player)
+  global["config"][event.player.index]["mode"] = event.mode
+  gui_refresh(event.player)
 end
 
 -- Called when the player clicks a filter icon
 function fdp_button_filter_clicked(event)
-    if not event.player.cursor_stack.valid_for_read then
-        table.remove(global["config"][event.player.index]["filter"], event.index)
+  if not event.player.cursor_stack.valid_for_read then
+    table.remove(global["config"][event.player.index]["filter"], event.index)
+  else
+    if is_in_filter(event.player, event.player.cursor_stack.name) then
+      event.player.print({"fdp-error-duplicate"})
     else
-        if is_in_filter(event.player, event.player.cursor_stack.name) then
-            event.player.print({"fdp-error-duplicate"})
-        else
-            table.remove(global["config"][event.player.index]["filter"], event.index)
-            table.insert(global["config"][event.player.index]["filter"], event.index, event.player.cursor_stack.name)
-        end
+      table.remove(global["config"][event.player.index]["filter"], event.index)
+      table.insert(global["config"][event.player.index]["filter"], event.index, event.player.cursor_stack.name)
     end
-    gui_refresh(event.player)
+  end
+  gui_refresh(event.player)
 end
 
 -- Called when the player clicks the eyedropper button
 function fdp_button_eyedropper_clicked(event)
-    global["config"][event.player.index]["eyedropping"] = not global["config"][event.player.index]["eyedropping"]
-    gui_refresh(event.player)
+  global["config"][event.player.index]["eyedropping"] = not global["config"][event.player.index]["eyedropping"]
+  gui_refresh(event.player)
 end
 
 -- Called when the player clicks the clear button
 function fdp_button_clear_clicked(event)
-    global["config"][event.player.index]["filter"] = {}
-    gui_refresh(event.player)
+  global["config"][event.player.index]["filter"] = {}
+  gui_refresh(event.player)
 end
